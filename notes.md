@@ -132,6 +132,86 @@ Our Goal is:
 	- Human approves
 
 
+**WHY DOCKER?**
+
+instead of installing wazuh directly on my laptop, i deployed it using docker.
+docker provides:
+	-isolated environment
+	-easy setup
+	-reproducible deployment
+	-easy cleanup
+
+instead of manually installing
+	-wazuh manager
+	-wazuh dashboard
+	-open search
+	-supporting services
+
+**DOCKER COMPOSE STARTS EVERYTHING TOGETHER**
+
+Docker compose launches multiple containers.
+
+	-Wazuh Manager - acts as the central brain, recieve logs, manage agents, apply detection rules, generate alerts
+	-Wazuh Indexer - stores all generated alerts, Elastic Search, stores JSON Documents
+	-Wazuh Dashboard - provides a web interface, viewing alerts, searching logs, monitoring endpoints.
+
+	
+**CONNECTING MY LINUX WITH WAZUH**
+i installed the wazuh agent, a monitoring agent.
+its job is to collect:
+	-system logs
+	-security events
+	-auditd logs
+
+**AUDITD**
+i also configured auditd
+it monitors linux security events
+
+ex:
+	-user login
+	-failed login
+	-file modification
+	-permission changes
+
+**FLOW OF DATA**
+
+Linux machine -> auditd detects events -> wazuh agent collects events -> wazuh manager recieves -> manager applies detection rules -> creates security alerts -> stores alert in Open Search
+
+at this point, alerts stay inside wazuh
+
+**WHY APIs**
+if 10k alerts,
+human cannot read it,
+AI should not be given the access of the entire database
+
+Wazuh exposes RESTAPIs
+Apps communicates using APIs.
+
+
+**POSTMAN TESTING**
+before integrating the API into an automation workflow, 
+i wanted to understand 
+	-authentication
+	-endpoints
+	-JSON Structure
+
+instead of writing code, i used Postman, Postman is simply an API testing tool.
+
+**NEXT STEP**
+
+Now instead of manually reading 5000 Alerts.
+an AI agent can consume the API
+
+Workflow becomes:
+
+Wazuh API -> JSON Alerts -> LLM -> Summarize -> Prioritize -> Recommended Fix -> GitHub Issue -> Jira Ticket
+
+
+
+
+
+
+
 
 
 
